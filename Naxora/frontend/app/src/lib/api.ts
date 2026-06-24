@@ -1,6 +1,4 @@
-// API Utility for backend communication
-// Set VITE_API_URL in your .env file (e.g., VITE_API_URL=https://your-backend.vercel.app)
-// If not set, uses relative URLs (works when frontend & backend are on same domain)
+
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
