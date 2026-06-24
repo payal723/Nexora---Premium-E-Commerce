@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ecommerce-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: ecommerce-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://backend:5000
+    depends_on:
+      - backend
+    volumes:
+      - ./backend:/app
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
