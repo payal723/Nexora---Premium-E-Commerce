@@ -17,7 +17,6 @@ export const protect = async (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    // Attach user to request (exclude password)
     const user = await User.findById(decoded.userId);
     if (!user) {
       return next(new AppError('User no longer exists.', 401));

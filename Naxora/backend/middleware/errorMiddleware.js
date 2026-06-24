@@ -1,4 +1,3 @@
-// Custom error class for operational errors
 export class AppError extends Error {
   constructor(message, statusCode) {
     super(message);
