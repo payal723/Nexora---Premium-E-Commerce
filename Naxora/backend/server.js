@@ -20,7 +20,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://payal-co.vercel.app',
+  'https://nexora-premium-e-commerce.vercel.app/',
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
