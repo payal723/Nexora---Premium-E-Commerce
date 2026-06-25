@@ -10,7 +10,7 @@ import type { Product } from '@/types';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FeaturedProducts() {
-const [products, setProducts] = useState<Product[]>([]);
+const [products, setProducts] = useState<any[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
