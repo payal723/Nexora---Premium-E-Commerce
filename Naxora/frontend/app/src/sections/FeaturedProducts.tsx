@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import ProductCard from '@/components/ProductCard';
 import { productAPI } from '@/lib/api';
-import type { Product } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
