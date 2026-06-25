@@ -1,7 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
 import fileUpload from 'express-fileupload';
 import { connectDB } from './config/db.js';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
@@ -13,10 +14,9 @@ import adminRoutes from './routes/adminRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
-connectDB();
 
 const app = express();
+connectDB();
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -34,6 +34,8 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+console.log(CLIENT_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
