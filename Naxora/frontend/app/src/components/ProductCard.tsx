@@ -45,13 +45,16 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
           <Heart size={16} fill={inWishlist ? 'currentColor' : 'none'} />
         </button>
 
-        <button
-          onClick={() => addToCart(product)}
-          className="absolute bottom-3 left-3 right-3 h-10 bg-[#6c5ce7] text-white rounded-xl flex items-center justify-center gap-2 text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#a29bfe]"
-        >
-          <ShoppingCart size={14} />
-          Add to Cart
-        </button>
+       <button 
+  onClick={() => addToCart(product)}
+  className="absolute bottom-3 left-3 right-3 h-10 bg-[#6c5ce7] 
+    text-white rounded-xl flex items-center justify-center gap-2 
+    text-sm font-medium 
+    hover:bg-[#a29bfe]"
+>
+  <ShoppingCart size={14} />
+  Add to Cart
+</button>
       </div>
 
       {/* Info */}
