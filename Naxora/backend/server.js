@@ -20,16 +20,20 @@ connectDB();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://nexora-premium-e-commerce.vercel.app',  
+  'https://nexora-premium-e-commerce-dktvv77j7-payaljaat55-4980s-projects.vercel.app/',  
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (
+      !origin ||
+      origin.includes("vercel.app") ||
+      allowedOrigins.includes(origin)
+    ) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,

@@ -98,7 +98,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           await fetchCart();
         }
       } catch {
-        // Not authenticated, that's fine
         setUser(null);
       } finally {
         setAuthLoading(false);
@@ -118,13 +117,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setCart(mapped);
       }
     } catch {
-      // If cart fetch fails, just keep empty cart
     } finally {
       setCartLoading(false);
     }
   }, []);
 
-  // Persist wishlist to localStorage
   useEffect(() => {
     localStorage.setItem('nexora_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
