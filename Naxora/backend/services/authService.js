@@ -19,8 +19,8 @@ export const setCookies = (res, accessToken, refreshToken) => {
 
   const cookieOptions = {
     httpOnly: true,
-    secure: isProduction,          // HTTPS only in production
-    sameSite: isProduction ? 'none' : 'lax',  // 'none' for cross-domain
+    secure: isProduction,          
+    sameSite: isProduction ? 'none' : 'lax',  
   };
 
   res.cookie('accessToken', accessToken, {
