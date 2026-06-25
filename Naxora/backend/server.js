@@ -35,7 +35,6 @@ app.use(cors({
   credentials: true,
 }));
 
-console.log(CLIENT_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
