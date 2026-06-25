@@ -194,9 +194,9 @@ export const orderAPI = {
 
 // Product APIs
 export const productAPI = {
-  getProducts: () =>
-    request<{ success: boolean; products: unknown[] }>('/api/products'),
+ getProducts: () =>
+  request<{ success: boolean; products: unknown[] }>('/api/products'),
 
-  getProductById: (id: string) =>
-    request<{ success: boolean; product: unknown }>(`/api/products/${id}`),
+ getProductById: (id: string) =>
+  request<{ success: boolean; product: Product }>(`/api/products/${id}`),
 };

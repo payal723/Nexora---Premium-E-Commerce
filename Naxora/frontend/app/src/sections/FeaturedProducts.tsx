@@ -5,20 +5,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import ProductCard from '@/components/ProductCard';
 import { productAPI } from '@/lib/api';
+import type { Product } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
+const [products, setProducts] = useState<Product[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    productAPI.getProducts().then((res) => {
-      if (res.success) {
-        setProducts(res.products);
-      }
-    });
-  }, []);
+  productAPI.getProducts().then((res) => {
+    if (res.success) {
+      setProducts(res.products);
+    }
+  });
+}, []);
 
   const featured = products.slice(0, 8);
 
