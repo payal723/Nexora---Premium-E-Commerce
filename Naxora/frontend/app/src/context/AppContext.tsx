@@ -46,23 +46,25 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Helper: Convert backend cart items to frontend CartItem format
-function mapCartItems(backendCart: { items: Array<{ product: { _id: string; name: string; price: number; images: { url: string }[]; stock: number; isActive: boolean }; quantity: number; price: number }>; totalPrice: number; totalItems: number }): CartItem[] {
+function mapCartItems(backendCart: { items: Array<{ product: { _id: string; name: string; price: number; images: { url: string }[]; stock: number; isActive: boolean } | null; quantity: number; price: number }>; totalPrice: number; totalItems: number }): CartItem[] {
   if (!backendCart || !backendCart.items) return [];
-  return backendCart.items.map((item) => ({
-    product: {
-      id: item.product._id,
-      name: item.product.name,
-      category: '',
-      price: item.price || item.product.price,
-      image: item.product.images?.[0]?.url || '/placeholder.jpg',
-      rating: 0,
-      reviews: 0,
-      description: '',
-      features: [],
-      inStock: item.product.stock > 0 && item.product.isActive,
-    },
-    quantity: item.quantity,
-  }));
+  return backendCart.items
+    .filter((item) => item.product) // skip items whose product no longer exists
+    .map((item) => ({
+      product: {
+        id: item.product!._id,
+        name: item.product!.name,
+        category: '',
+        price: item.price || item.product!.price,
+        image: item.product!.images?.[0]?.url || '/placeholder.jpg',
+        rating: 0,
+        reviews: 0,
+        description: '',
+        features: [],
+        inStock: item.product!.stock > 0 && item.product!.isActive,
+      },
+      quantity: item.quantity,
+    }));
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {

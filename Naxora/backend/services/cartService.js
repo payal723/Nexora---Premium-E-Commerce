@@ -7,7 +7,18 @@ export const getCart = async (userId) => {
     'items.product',
     'name price images stock isActive'
   );
-  return cart || { items: [], totalPrice: 0, totalItems: 0 };
+
+  if (!cart) return { items: [], totalPrice: 0, totalItems: 0 };
+
+  // Drop items whose product was deleted (populate returns null for those)
+  const validItems = cart.items.filter((item) => item.product);
+
+  if (validItems.length !== cart.items.length) {
+    cart.items = validItems;
+    await cart.save();
+  }
+
+  return cart;
 };
 
 export const addToCart = async (userId, productId, quantity = 1) => {
