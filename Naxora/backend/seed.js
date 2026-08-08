@@ -75,9 +75,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        // TODO: replace with a real image URL — search "over ear headphones" on unsplash.com or pexels.com,
-        // right-click the photo -> "Copy Image Address", and paste it here.
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://images.unsplash.com/photo-1689872072441-5aed6df99448?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bm9pY2UlMjBjYW5zbGluZyUyMGhlYWRwaG9uZXN8ZW58MHx8MHx8fDA%3D",
         alt: "Headphones",
       },
     ],
@@ -92,9 +90,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        // TODO: replace with a real image URL — search "led desk lamp" on unsplash.com or pexels.com,
-        // right-click the photo -> "Copy Image Address", and paste it here.
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://images.unsplash.com/photo-1621177555452-bedbe4c28879?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Desk Lamp",
       },
     ],
@@ -109,9 +105,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        // TODO: replace with a real image URL — search "laptop backpack" on unsplash.com or pexels.com,
-        // right-click the photo -> "Copy Image Address", and paste it here.
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://images.unsplash.com/photo-1650286712513-e1419fa096b2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dHJhdmVsJTIwbGFwdG9wJTIwYmFnfGVufDB8fDB8fHww",
         alt: "Backpack",
       },
     ],
@@ -126,9 +120,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        // TODO: replace with a real image URL — search "designer sunglasses" on unsplash.com or pexels.com,
-        // right-click the photo -> "Copy Image Address", and paste it here.
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://plus.unsplash.com/premium_photo-1692809752278-43df89f0c1bd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZGVzaWduZXIlMjBzdW5nbGFzc2VzfGVufDB8fDB8fHww",
         alt: "Sunglasses",
       },
     ],
@@ -144,7 +136,7 @@ const seedProducts = async () => {
 
     await Product.insertMany(products);
 
-    console.log("✅ Products Seeded Successfully");
+    console.log("Products Seeded Successfully");
 
     process.exit();
   } catch (error) {
