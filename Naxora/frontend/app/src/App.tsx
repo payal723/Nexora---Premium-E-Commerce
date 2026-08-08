@@ -13,6 +13,7 @@ import WishlistPage from '@/pages/WishlistPage';
 import AccountPage from '@/pages/AccountPage';
 import OrdersPage from '@/pages/OrdersPage';
 import OrderDetailPage from '@/pages/OrderDetailPage';
+import AdminPage from '@/pages/AdminPage';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/order/:id" element={<OrderDetailPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
           
           <Footer />

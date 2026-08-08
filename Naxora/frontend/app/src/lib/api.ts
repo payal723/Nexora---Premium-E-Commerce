@@ -1,4 +1,3 @@
-
 import type { Product } from '@/types';
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -193,10 +192,66 @@ export const orderAPI = {
 };
 
 // Product APIs
+export interface AdminProductInput {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+  brand?: string;
+  images: { url: string; alt?: string }[];
+  isActive?: boolean;
+}
+
 export const productAPI = {
  getProducts: () =>
   request<{ success: boolean; products: unknown[] }>('/api/products'),
 
  getProductById: (id: string) =>
   request<{ success: boolean; product: Product }>(`/api/products/${id}`),
+
+ createProduct: (data: AdminProductInput) =>
+  request<{ success: boolean; product: Product }>('/api/products', {
+    method: 'POST',
+    body: data as unknown as Record<string, unknown>,
+  }),
+
+ updateProduct: (id: string, data: Partial<AdminProductInput>) =>
+  request<{ success: boolean; product: Product }>(`/api/products/${id}`, {
+    method: 'PUT',
+    body: data as unknown as Record<string, unknown>,
+  }),
+
+ deleteProduct: (id: string) =>
+  request<{ success: boolean }>(`/api/products/${id}`, {
+    method: 'DELETE',
+  }),
+};
+
+// Upload API (multipart/form-data — must NOT go through the JSON-only `request` helper,
+// since the browser needs to set its own Content-Type with the multipart boundary)
+export interface UploadImageResponse {
+  success: boolean;
+  image: { url: string; publicId: string; alt: string };
+}
+
+export const uploadAPI = {
+  uploadImage: async (file: File, alt: string = ''): Promise<UploadImageResponse> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    if (alt) formData.append('alt', alt);
+
+    const response = await fetch(`${API_BASE}/api/upload/image`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Upload failed: ${response.status}`);
+    }
+
+    return response.json();
+  },
 };

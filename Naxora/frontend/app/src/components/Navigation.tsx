@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Heart, Search, User, Menu, X, LogOut, Loader2 } from 'lucide-react';
+import { ShoppingCart, Heart, Search, User, Menu, X, LogOut, Loader2, LayoutDashboard } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 
 export default function Navigation() {
@@ -165,6 +165,16 @@ export default function Navigation() {
 
             {user ? (
               <div className="hidden sm:flex items-center gap-1">
+                {user.role === 'admin' && (
+                  <Link
+                    to="/admin"
+                    className="p-2.5 text-[#a0a0b0] hover:text-[#f8f9fa] transition-colors rounded-lg hover:bg-white/5"
+                    aria-label="Admin Panel"
+                    title="Admin Panel"
+                  >
+                    <LayoutDashboard size={18} />
+                  </Link>
+                )}
                 <Link
                   to="/account"
                   className="p-2.5 text-[#a0a0b0] hover:text-[#f8f9fa] transition-colors rounded-lg hover:bg-white/5"
@@ -243,6 +253,15 @@ export default function Navigation() {
                   >
                     <ShoppingCart size={18} /> My Orders
                   </Link>
+                  {user.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center gap-3 px-4 py-3 text-[#a0a0b0] hover:text-[#f8f9fa] hover:bg-white/5 rounded-lg"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <LayoutDashboard size={18} /> Admin Panel
+                    </Link>
+                  )}
                   <button
                     onClick={() => { logout(); setMobileOpen(false); }}
                     className="flex items-center gap-3 px-4 py-3 text-[#a0a0b0] hover:text-[#fd79a8] hover:bg-white/5 rounded-lg w-full"
