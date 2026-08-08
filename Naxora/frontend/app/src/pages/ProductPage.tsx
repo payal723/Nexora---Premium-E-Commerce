@@ -7,7 +7,6 @@ import { useApp } from '@/context/AppContext';
 import ProductCard from '@/components/ProductCard';
 import type { Product } from '@/types';
 
-// Shape the backend actually returns for a product
 interface BackendProduct {
   _id: string;
   name: string;
@@ -20,7 +19,6 @@ interface BackendProduct {
   brand?: string;
 }
 
-// Map backend product -> frontend Product type (id must be the real Mongo _id)
 function mapProduct(p: BackendProduct): Product {
   return {
     id: p._id,
