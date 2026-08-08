@@ -12,7 +12,7 @@ const socialLinks = [
   { icon: Instagram, label: 'Instagram' },
   { icon: Twitter, label: 'Twitter' },
   { icon: Facebook, label: 'Facebook' },
-  { icon: Linkedin, label: 'LinkedIn' },
+  { icon: Linkedin, label: 'https://www.linkedin.com/in/payal-jat/' },
 ];
 
 export default function Footer() {

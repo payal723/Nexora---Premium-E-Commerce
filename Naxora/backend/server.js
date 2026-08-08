@@ -20,24 +20,32 @@ connectDB();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://nexora-premium-e-commerce-dktvv77j7-payaljaat55-4980s-projects.vercel.app/',  
+  'http://localhost:3000',  
+  'https://nexora-premium-e-commerce-dktvv77j7-payaljaat55-4980s-projects.vercel.app', 
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
+const cleanOrigin = (url) => url ? url.replace(/\/$/, '') : url;
+
+const cleanAllowedOrigins = allowedOrigins.map(cleanOrigin);
+
 app.use(cors({
   origin: (origin, callback) => {
+    const cleanOriginUrl = cleanOrigin(origin);
     if (
       !origin ||
       origin.includes("vercel.app") ||
-      allowedOrigins.includes(origin)
+      cleanAllowedOrigins.includes(cleanOriginUrl)
     ) {
       callback(null, true);
     } else {
+      console.log(' CORS Blocked:', origin);  
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 }));
+
 
 
 app.use(express.json());
