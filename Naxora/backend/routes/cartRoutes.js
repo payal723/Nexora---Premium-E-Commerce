@@ -5,7 +5,6 @@ import { cartItemValidation, validate } from '../middleware/validationMiddleware
 
 const router = express.Router();
 
-// All cart routes require authentication
 router.use(protect);
 
 router.get('/', cartController.getCart);

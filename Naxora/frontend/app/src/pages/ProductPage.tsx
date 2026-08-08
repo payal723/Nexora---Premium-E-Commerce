@@ -2,26 +2,94 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Star, Minus, Plus, Check, Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 import gsap from 'gsap';
-import { products } from '@/data/products';
+import { productAPI } from '@/lib/api';
 import { useApp } from '@/context/AppContext';
 import ProductCard from '@/components/ProductCard';
+import type { Product } from '@/types';
+
+// Shape the backend actually returns for a product
+interface BackendProduct {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  images: { url: string; alt?: string }[];
+  ratings: { average: number; count: number };
+  description: string;
+  brand?: string;
+}
+
+// Map backend product -> frontend Product type (id must be the real Mongo _id)
+function mapProduct(p: BackendProduct): Product {
+  return {
+    id: p._id,
+    name: p.name,
+    category: p.category,
+    price: p.price,
+    image: p.images?.[0]?.url || '/images/placeholder.jpg',
+    rating: p.ratings?.average || 0,
+    reviews: p.ratings?.count || 0,
+    description: p.description,
+    features: [],
+    inStock: p.stock > 0,
+  };
+}
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const { addToCart, toggleWishlist, isInWishlist } = useApp();
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const product = products.find((p) => p.id === id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'reviews'>('description');
   const inWishlist = isInWishlist(product?.id || '');
 
-  const relatedProducts = products
-    .filter((p) => p.category === product?.category && p.id !== product?.id)
-    .slice(0, 4);
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+
+    setLoading(true);
+    setNotFound(false);
+    setProduct(null);
+    setQuantity(1);
+
+    productAPI
+      .getProductById(id)
+      .then((res) => {
+        if (cancelled) return;
+        const mapped = mapProduct(res.product as unknown as BackendProduct);
+        setProduct(mapped);
+
+        // Fetch related products from the same category
+        return productAPI.getProducts().then((allRes) => {
+          if (cancelled) return;
+          const related = (allRes.products as unknown as BackendProduct[])
+            .map(mapProduct)
+            .filter((p) => p.category === mapped.category && p.id !== mapped.id)
+            .slice(0, 4);
+          setRelatedProducts(related);
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setNotFound(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   useEffect(() => {
-    if (sectionRef.current) {
+    if (sectionRef.current && product) {
       gsap.fromTo(
         '.product-detail-content',
         { opacity: 0, y: 30 },
@@ -29,9 +97,24 @@ export default function ProductPage() {
       );
     }
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [id, product]);
 
-  if (!product) {
+  if (loading) {
+    return (
+      <div className="pt-24 pb-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="h-96 rounded-2xl bg-[#12121a] border border-[#2a2a3a] animate-pulse" />
+          <div className="space-y-4">
+            <div className="h-6 w-1/3 bg-[#12121a] rounded animate-pulse" />
+            <div className="h-8 w-2/3 bg-[#12121a] rounded animate-pulse" />
+            <div className="h-24 w-full bg-[#12121a] rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (notFound || !product) {
     return (
       <div className="pt-24 pb-16 px-4 text-center">
         <h2 className="text-2xl text-[#f8f9fa] mb-4">Product not found</h2>
@@ -114,14 +197,16 @@ export default function ProductPage() {
             </p>
 
             {/* Features */}
-            <div className="space-y-2 mb-8">
-              {product.features.map((feature) => (
-                <div key={feature} className="flex items-center gap-2 text-sm text-[#a0a0b0]">
-                  <Check size={14} className="text-[#00cec9]" />
-                  {feature}
-                </div>
-              ))}
-            </div>
+            {product.features.length > 0 && (
+              <div className="space-y-2 mb-8">
+                {product.features.map((feature) => (
+                  <div key={feature} className="flex items-center gap-2 text-sm text-[#a0a0b0]">
+                    <Check size={14} className="text-[#00cec9]" />
+                    {feature}
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Quantity */}
             <div className="flex items-center gap-4 mb-6">
@@ -230,7 +315,7 @@ export default function ProductPage() {
                 </tr>
                 <tr className="border-b border-[#2a2a3a]">
                   <td className="py-3 text-sm text-[#a0a0b0]">In Stock</td>
-                  <td className="py-3 text-sm text-[#00cec9]">Yes</td>
+                  <td className="py-3 text-sm text-[#00cec9]">{product.inStock ? 'Yes' : 'No'}</td>
                 </tr>
               </tbody>
             </table>

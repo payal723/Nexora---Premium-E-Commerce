@@ -3,16 +3,51 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, X, SlidersHorizontal, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { products, categories } from '@/data/products';
+import { categories } from '@/data/products';
+import { productAPI } from '@/lib/api';
 import { useApp } from '@/context/AppContext';
 import ProductCard from '@/components/ProductCard';
+import type { Product } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Shape the backend actually returns for a product
+interface BackendProduct {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  images: { url: string; alt?: string }[];
+  ratings: { average: number; count: number };
+  description: string;
+  brand?: string;
+}
+
+// Map backend product -> frontend Product type (id must be the real Mongo _id)
+function mapProduct(p: BackendProduct): Product {
+  return {
+    id: p._id,
+    name: p.name,
+    category: p.category,
+    price: p.price,
+    image: p.images?.[0]?.url || '/images/placeholder.jpg',
+    rating: p.ratings?.average || 0,
+    reviews: p.ratings?.count || 0,
+    description: p.description,
+    features: [],
+    inStock: p.stock > 0,
+  };
+}
 
 export default function ShopPage() {
   const [searchParams] = useSearchParams();
   const { searchQuery, setSearchQuery } = useApp();
   const sectionRef = useRef<HTMLElement>(null);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState<string | null>(null);
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
     searchParams.get('category') || ''
@@ -24,6 +59,33 @@ export default function ShopPage() {
   const [mobileFilters, setMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+
+  // Fetch real products from backend (real Mongo _id, not fake "1","2","3"...)
+  useEffect(() => {
+    let cancelled = false;
+    setProductsLoading(true);
+    setProductsError(null);
+
+    productAPI
+      .getProducts()
+      .then((res) => {
+        if (cancelled) return;
+        const mapped = (res.products as unknown as BackendProduct[]).map(mapProduct);
+        setProducts(mapped);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        const error = err as Error;
+        setProductsError(error.message || 'Failed to load products');
+      })
+      .finally(() => {
+        if (!cancelled) setProductsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const query = searchParams.get('q') || '';
@@ -81,7 +143,7 @@ export default function ShopPage() {
     }
 
     return filtered;
-  }, [localSearch, searchQuery, selectedCategory, priceRange, minRating, sortBy]);
+  }, [products, localSearch, searchQuery, selectedCategory, priceRange, minRating, sortBy]);
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const paginatedProducts = filteredProducts.slice(
@@ -286,7 +348,9 @@ export default function ShopPage() {
           )}
 
           <p className="text-sm text-[#6c6c7e]">
-            {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
+            {productsLoading
+              ? 'Loading products…'
+              : `${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''} found`}
           </p>
         </div>
 
@@ -299,7 +363,18 @@ export default function ShopPage() {
 
           {/* Products */}
           <div className="flex-1">
-            {paginatedProducts.length > 0 ? (
+            {productsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-80 rounded-2xl bg-[#12121a] border border-[#2a2a3a] animate-pulse" />
+                ))}
+              </div>
+            ) : productsError ? (
+              <div className="text-center py-20">
+                <h3 className="text-xl text-[#f8f9fa] mb-2">Couldn't load products</h3>
+                <p className="text-[#a0a0b0]">{productsError}</p>
+              </div>
+            ) : paginatedProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {paginatedProducts.map((product) => (
                   <div key={product.id} className="shop-product-card opacity-0">
