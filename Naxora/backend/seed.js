@@ -15,7 +15,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://plus.unsplash.com/premium_photo-1678099940967-73fe30680949?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8V2lyZWxlc3MlMjBFYXJidWRzfGVufDB8fDB8fHww",
         alt: "Wireless Earbuds",
       },
     ],
@@ -30,7 +30,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://plus.unsplash.com/premium_photo-1712848344597-27b66945f09d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c21hcnR3YXRjaHxlbnwwfHwwfHx8MA%3D%3D",
         alt: "Smartwatch",
       },
     ],
@@ -45,7 +45,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y290dG9uJTIwdHNoaXJ0fGVufDB8fDB8fHww",
         alt: "T-Shirt",
       },
     ],
@@ -60,7 +60,7 @@ const products = [
     brand: "Nexora",
     images: [
       {
-        url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        url: "https://images.unsplash.com/photo-1549943872-f7ff0b2b51be?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8SGVyaXRhZ2UlMjBMZWF0aGVyJTIwTWVzc2VuZ2VyJTIwQmFnfGVufDB8fDB8fHww",
         alt: "Messenger Bag",
       },
     ],
@@ -75,6 +75,8 @@ const products = [
     brand: "Nexora",
     images: [
       {
+        // TODO: replace with a real image URL — search "over ear headphones" on unsplash.com or pexels.com,
+        // right-click the photo -> "Copy Image Address", and paste it here.
         url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
         alt: "Headphones",
       },
@@ -90,6 +92,8 @@ const products = [
     brand: "Nexora",
     images: [
       {
+        // TODO: replace with a real image URL — search "led desk lamp" on unsplash.com or pexels.com,
+        // right-click the photo -> "Copy Image Address", and paste it here.
         url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
         alt: "Desk Lamp",
       },
@@ -105,6 +109,8 @@ const products = [
     brand: "Nexora",
     images: [
       {
+        // TODO: replace with a real image URL — search "laptop backpack" on unsplash.com or pexels.com,
+        // right-click the photo -> "Copy Image Address", and paste it here.
         url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
         alt: "Backpack",
       },
@@ -120,6 +126,8 @@ const products = [
     brand: "Nexora",
     images: [
       {
+        // TODO: replace with a real image URL — search "designer sunglasses" on unsplash.com or pexels.com,
+        // right-click the photo -> "Copy Image Address", and paste it here.
         url: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
         alt: "Sunglasses",
       },
